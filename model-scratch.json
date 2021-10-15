@@ -13,6 +13,7 @@
   "private": false,
   "author": "Canonical",
   "lastupdate": "1994-11-05T13:15:30Z",
+  "releasedate": "1994-11-05",
   "homepageurl": "https://ubuntu.com/download/server",
   "documentationurl": "https://ubuntu.com/server/docs",
   "contributors": [ "Brian Frichette <brian.frichette@gmail.com> (https://github.com/brian-frichette)" ],

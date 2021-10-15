@@ -1,0 +1,65 @@
+
+
+{
+  "name": "Ubuntu 20.04.3 LTS",
+  "description": "Ubuntu 20.04.3 LTS (Focal Fossa) Live Server amd64",
+  "keywords": [],
+  "version-scheme": "calver",
+  "version": "20.04.3",
+  "architecture": "amd64",
+  "filename": "ubuntu-20.04.3-live-server-amd64.iso",
+  "sha256sum": "f8e3086f3cea0fb3fefb29937ab5ed9d19e767079633960ccb50e76153effc98",
+  "sha256sumgpg": "-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEhDk43yKNIvezdCvA2Uqj8O/iEJIFAmCBz84ACgkQ2Uqj8O/i
+EJLq8hAAlEnVHWfxe2dS2rXtdxCkPBZzPMzpSBaCRgpqSE1VWTJtGnBeGgz0wlAf
+rWX8bG+qHq8SQeRLFhc5pfe6q92hwdkoxV6SE0w/gvPrBe6pbBeYJfPab6bp4S0t
+aqnX4Y0/KneYQwjSjV3/2kt7rpDdXESPNFD6Ltyy6/jK4vQ1AkKZHasA5yztoNAd
+yn6yxHQ+1C2GimcvepXv0xi4ODBLRkEgmmHinlQA3y8VkHRjDlqfLAmbQJ9mAL29
+GOcWtqvvZHOTKoIsVAusamNUy/EDanMD7Wb21fEbh7tUeu8qADARztgisd4yI19r
+1sHyOAMGBdPqiMWy8u3k/Hw3Z9FTumknRhP3i7CuwkXVoHe9way0YiUVXJw1wjh9
+KjhnLaJE7ofEaMgXDM/29ePCg3F3/LeoDRTsOvhFj09NnwYDcaz/XnJWARBLyw3T
+jmFKZtQ7ksGHde6WDofxEjtS49JuQJk1b6WKacpcDHdOOz3O1zwnZWe0tD8suPbd
+4HOfNUHMuyHjbhlIqi6KrerL9To9brh8TkNcQq5XPVJHyGVk8tjo9NPlqX6fYNgQ
+xJBPqPJ+r/v6vNBL/H5LCA5dmd28sLVvyIO5g6ysF/mFngPnYX4+M4f4mkKITIWI
+ZxKJO9ZWD6c3YWHP+TdVBMwYwwLIiVT0ht24EJQREbDu1GdBfoI=
+=0vqg
+-----END PGP SIGNATURE-----",
+
+  "private": false,
+  "author": "Canonical",
+  "lastupdate" "1994-11-05T13:15:30Z",
+  "homepageurl": "https://ubuntu.com/download/server",
+  "documentationurl": "https://ubuntu.com/server/docs",
+  "contributors": [ "Brian Frichette <brian.frichette@gmail.com> (https://github.com/brian-frichette)" ],
+  "targetedBy": {
+    "ubuntu-server-latest-lts": ">=20.04.x",
+    "ubuntu-server-20.04.latest": "20.04.x",
+    "ubuntu-server-20.04.3": "20.04.3",
+    "ubuntu-server-latest": "*"
+  },
+},
+{
+  "publiclocations": {
+  "https": {
+    "https://releases.ubuntu.com/20.04.3/ubuntu-20.04.3-live-server-amd64.iso",
+    "https://mirror.internet.asn.au/pub/ubuntu/releases/20.04.3/ubuntu-20.04.3-live-server-amd64.iso"
+  },
+  "http":{
+    "http://releases.ubuntu.com/20.04.3/ubuntu-20.04.3-live-server-amd64.iso",
+    "http://mirror.internet.asn.au/pub/ubuntu/releases/20.04.3/ubuntu-20.04.3-live-server-amd64.iso"
+  } 
+
+
+
+
+
+  },
+  "privatelocations": {
+    "nfs": {
+      "nfs.example.local:/opt/iso/ubuntu/ubuntu-20.04.3-live-server-amd64.iso"
+    }
+    "cifs": {
+      "\\dc.local\iso\ubuntu\ubuntu-20.04.3-live-server-amd64.iso"
+    }
+  }

@@ -1,3 +1,5 @@
+Django ISO Manager is a repository replication manager written in Python using the Django Framework.
+
 Create a Django App to manage an ISO repository for Operation Systems (OS) images like Windows or Linux. 
 
 Infrastructure:
@@ -47,8 +49,6 @@ From an Admin panel built using Django, the User should be able to:
 
 
 add feature: : bittorrent download, remote library download(nfs, smb s3), remote share storage driver(nfs, smb, s3)
-
-
 add feature: custom folder structure (default structure will require the standard Family/OS - Flavor/os.vanilla-1.0.1.iso
 add feature:  download all latest from specific os family (or other conditions)
 add feature: add iso to catalog (form or json)

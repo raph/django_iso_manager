@@ -40,14 +40,21 @@ class LocalCatalog(models.Model):
         default=OsType.Linux,
 
 
-
-# The library of ISO images managed locally
+# The library of ISO images detected locally (updated by folder scan)
 
 class LocalLibrary(models.Model):
-
+    localname = models.CharField
+    sha256sum = models.CharField(max_length=64)
+    targeted_by = models.ForeignKey(LibraryTarget, on_delete=models.CASCADE)
 
 
 # The library of items to be downloaded and updated
 
 class LibraryTarget(models.Model):
+    name = models.CharField
+    desiredversion = models.???
+    updatefrequency = 
+    
+
+
 

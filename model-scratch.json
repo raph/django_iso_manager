@@ -2,6 +2,7 @@
 
 {
   "name": "Ubuntu 20.04.3 LTS",
+  "family": "Ubuntu",
   "description": "Ubuntu 20.04.3 LTS (Focal Fossa) Live Server amd64",
   "keywords": ["ubuntu", "server", "lts", "focal", "fossa" ],
   "version-scheme": "calver",
@@ -48,3 +49,8 @@
       "\\dc.local\iso\ubuntu\ubuntu-20.04.3-live-server-amd64.iso"
     }
   }
+
+"os_type": ["linux", "bsd", "apple", "microsoft", "vmware" ],
+"os_family": ["ubuntu", "centos", "rhel", "microsoft", "macos", "mint", "freebsd" ],
+"os_flavor": ["kubuntu", "server", "esxi", "kubuntu", "cinnamon" ],
+"os_arch": ["kubuntu", "server", "esxi", "kubuntu", "cinnamon" ],

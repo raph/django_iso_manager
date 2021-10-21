@@ -1,9 +1,10 @@
 from django.contrib import admin
 
+from .models import CatalogItem, Datastore, ManagedItem, OsEdition, RemoteCatalog, UpdateTarget
+
+
 # Register your models here.
 
-from .models import LocalCatalog, RemoteCatalog, ManagedItem, LibraryTarget, Datastore
-
-@admin.register(LocalCatalog, RemoteCatalog, ManagedItem, LibraryTarget, Datastore)
+@admin.register(CatalogItem, RemoteCatalog, ManagedItem, UpdateTarget, Datastore, OsEdition)
 class DefaultAdmin(admin.ModelAdmin):
     pass

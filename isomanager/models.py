@@ -13,8 +13,9 @@ class Datastore(models.Model):
                                       max_length=4, choices=DatastoreType.choices, default=DatastoreType.PATH)
     location = models.CharField(_('Location'), help_text=_('The the location of the datastore'),max_length=255)
     auth_type = models.CharField(_('Auth Type'), help_text=_('Authentication type, username or key, only used for SSH'),
-                                      max_length=4, choices=AuthType.choices, blank=True, null=True)
-    username = models.CharField(_('Username'), help_text=_('SSH Username'),max_length=64, blank=True, null=True)
+                                 max_length=4, choices=AuthType.choices, blank=True, null=True)
+    username = models.CharField(_('Username'), help_text=_(
+        'SSH Username'), max_length=64, blank=True, null=True)
     password = models.CharField(_('Password'), help_text=_('SSH Password'),max_length=64, blank=True, null=True)
     readonly = models.BooleanField(_('Read-only'),
                                    help_text=_('True if the iso manager does not have write permission'))
@@ -56,9 +57,9 @@ class OsEdition(models.Model):
                                        unique=True)
     os_edition_version = models.CharField(_('Version Number'), help_text=_('The version number of the item'), max_length=32)
     os_edition_arch = models.CharField(_('OS Architecture'), help_text=_('The architecture of the OS'), max_length=16,
-                               choices=OsArch.choices, default=OsArch.AMD64)
+                                       choices=OsArch.choices, default=OsArch.AMD64)
     os_edition_language = models.CharField(_('Language'), help_text=_('The language of the item in the catalog'),
-                                   choices=OsLanguage.choices)
+                                           choices=OsLanguage.choices)
     def __str__(self):
         return "{0} - {1}".format(self.os_edition_name, self.os_edition_version, self.os_edition_arch, self.os_edition_language)
 

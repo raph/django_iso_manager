@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 import recurrence.fields
@@ -7,11 +8,15 @@ from django.utils.translation import gettext as _
 from isomanager.choices import AuthType, DatastoreType, OsArch, OsLanguage, OsType
 from isomanager.utils import hash
 
+logger = logging.getLogger(__name__)
+
 
 class Datastore(models.Model):
     """
     The datastore class used to list monitored folder
     """
+    created_time = models.DateTimeField(_("Created Time"), auto_now_add=True)
+    updated_time = models.DateTimeField(_("Updated Time"), auto_now=True)
     datastore_type = models.CharField(_('Datastore'), help_text=_('Datastore type, local path and SSH are supported'), max_length=4, choices=DatastoreType.choices, default=DatastoreType.PATH)
     location = models.CharField(_('Location'), help_text=_('The the location of the datastore'), max_length=255)
     auth_type = models.CharField(_('Auth Type'), help_text=_('Authentication type, username or key, only used for SSH'), max_length=4, choices=AuthType.choices, blank=True, null=True)
@@ -23,12 +28,16 @@ class Datastore(models.Model):
     # TODO: match to a library item
     def scan(self):
         p = Path(self.location)
-        paths = list(p.glob('**/*.iso'.format(self.location)))
-        print(paths)
-        for path in paths:
+        for path in p.glob('**/*.iso'):
             checksum = hash(path)
+            catalog_time = None
             print(checksum)
-            item = ManagedItem.objects.get_or_create(datastore=self, full_path=path, sha256sum=checksum)
+            try:
+                catalog_time = CatalogItem.objects.get(sha256sum=checksum)
+            except CatalogItem.DoesNotExist:
+                logger.error(f'no catalog item were found with checksum: {checksum}')
+                pass
+            item = ManagedItem.objects.get_or_create(datastore=self, full_path=path, sha256sum=checksum, library_item=catalog_time)
             print(item)
 
     def __str__(self):
@@ -44,6 +53,8 @@ class RemoteCatalog(models.Model):
     """
     The public catalog of ISO images
     """
+    created_time = models.DateTimeField(_("Created Time"), auto_now_add=True)
+    updated_time = models.DateTimeField(_("Updated Time"), auto_now=True)
     catalog_name = models.CharField(_('Catalog name'), help_text=_('The name of the catalog'), max_length=32)
     json_catalog = models.JSONField(_('JSON catalog'), help_text=_('The JSON model as downloaded from the upstream'))
     version = models.CharField(_('Version'), help_text=_('Version of the JSON catalog'), max_length=32)
@@ -61,14 +72,16 @@ class RemoteCatalog(models.Model):
 
 
 class OsEdition(models.Model):
-    os_edition_name = models.CharField(_('OS Edition'), help_text=_('The edition of the OS'), max_length=32, unique=True)
-    os_edition_version = models.CharField(_('Version Number'), help_text=_('The version number of the item'), max_length=32, unique=True)
-    os_edition_arch = models.CharField(_('OS Architecture'), help_text=_('The architecture of the OS'), max_length=16, choices=OsArch.choices, default=OsArch.AMD64, unique=True)
-    os_edition_language = models.CharField(_('Language'), help_text=_('The language of the item in the catalog'), choices=OsLanguage.choices, max_length=64, unique=True)
+    created_time = models.DateTimeField(_("Created Time"), auto_now_add=True)
+    updated_time = models.DateTimeField(_("Updated Time"), auto_now=True)
+    os_edition_name = models.CharField(_('OS Edition'), help_text=_('The edition of the OS'), max_length=32)
+    os_edition_version = models.CharField(_('Version Number'), help_text=_('The version number of the item'), max_length=32)
+    os_edition_arch = models.CharField(_('OS Architecture'), help_text=_('The architecture of the OS'), max_length=16, choices=OsArch.choices, default=OsArch.AMD64)
+    os_edition_language = models.CharField(_('Language'), help_text=_('The language of the item in the catalog'), choices=OsLanguage.choices, max_length=64)
 
     # FIXME: wrong format
     def __str__(self):
-        return "{0} - {1}".format(self.os_edition_name, self.os_edition_version, self.os_edition_arch, self.os_edition_language)
+        return "{0} - {1} - {2} - {3}".format(self.os_edition_name, self.os_edition_version, self.os_edition_arch, self.os_edition_language)
 
     class Meta:
         verbose_name = _('OS Edition')
@@ -80,7 +93,8 @@ class CatalogItem(models.Model):
     """
     The local image Catalog model
     """
-    download_urls = models.JSONField,
+    created_time = models.DateTimeField(_("Created Time"), auto_now_add=True)
+    download_urls = models.JSONField(_("Download URLS"), default=list)
     last_update = models.DateTimeField(_('Last Update'), help_text=_('Time last scanned'))
     version_scheme = models.CharField(_('Version Scheme'), help_text=_('The version scheme being used'), max_length=3)
     maintainer = models.CharField(_('Maintainer'), help_text=_('The version number of the item'), max_length=255)
@@ -91,7 +105,7 @@ class CatalogItem(models.Model):
     release_date = models.DateTimeField(_('Release date'), help_text=_('The release date of this version'))
 
     def __str__(self):
-        return "{0} {1}".format(self.os_edition, self.version_number)
+        return "{0} {1}".format(self.os_edition, self.maintainer)
 
     class Meta:
         verbose_name = _('Catalog Item')
@@ -103,6 +117,8 @@ class UpdateTarget(models.Model):
     """
     The list of items to be downloaded and updated
     """
+    created_time = models.DateTimeField(_("Created Time"), auto_now_add=True)
+    updated_time = models.DateTimeField(_("Updated Time"), auto_now=True)
     target_name = models.CharField(_('Auto-Update Name'), help_text=_('The name for this auto-update target'), max_length=64)
     desired_version = models.CharField(_('Desired Version'), help_text=_('The desired target version of this image'), max_length=32)
     update_check_frequency = recurrence.fields.RecurrenceField(_('Update frequency'), help_text=_('How often should this image be updated'))
@@ -122,6 +138,8 @@ class ManagedItem(models.Model):
     scans :model:`isomanager.Datastore`.
     The library of ISO images detected locally (updated by folder scan)
     """
+    created_time = models.DateTimeField(_("Created Time"), auto_now_add=True)
+    updated_time = models.DateTimeField(_("Updated Time"), auto_now=True)
     full_path = models.CharField(max_length=255)
     datastore = models.ForeignKey(Datastore, on_delete=models.CASCADE)
     sha256sum = models.CharField(max_length=64)

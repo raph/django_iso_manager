@@ -1,9 +1,16 @@
+from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin, messages
 from django.db.models import JSONField
 from django.http import HttpResponseRedirect
 from django_json_widget.widgets import JSONEditorWidget
 
+from .forms import CatalogItemForm
 from .models import CatalogItem, Datastore, ManagedItem, OsEdition, RemoteCatalog, UpdateTarget
+
+
+class OsEditionFilter(AutocompleteFilter):
+    title = 'Os Edition'  # display title
+    field_name = 'os_edition'  # name of the foreign key field
 
 
 # Register your models here.
@@ -36,8 +43,9 @@ class RemoteCatalog(admin.ModelAdmin):
 
 @admin.register(CatalogItem)
 class CatalogItemAdmin(admin.ModelAdmin):
-    list_display = ('sha256sum', 'maintainer', 'os_type', 'os_edition', 'release_date', 'detached_from_head', 'created_time')
-    list_filter = ('detached_from_head',)
+    form = CatalogItemForm
+    list_display = ('sha256sum', 'maintainer', 'os_edition', 'release_date', 'detached_from_head', 'created_time')
+    list_filter = ('detached_from_head', OsEditionFilter)
     search_fields = ('sha256sum',)
     raw_id_fields = ('os_edition',)
     date_hierarchy = 'created_time'
@@ -48,9 +56,12 @@ class CatalogItemAdmin(admin.ModelAdmin):
 
 @admin.register(OsEdition)
 class OsEditionAdmin(admin.ModelAdmin):
-    list_display = ('os_edition_name', 'os_edition_version', 'os_edition_arch', 'os_edition_language', 'created_time', 'updated_time')
+    list_display = (
+        'os_edition_type', 'os_edition_name', 'os_edition_version',
+        'os_edition_arch', 'os_edition_language', 'created_time', 'updated_time'
+    )
     list_filter = ('os_edition_arch', 'os_edition_language')
-    search_fields = ('os_edition_name',)
+    search_fields = ('os_edition_type', 'os_edition_name', 'os_edition_version', 'os_edition_arch', 'os_edition_language',)
 
 
 @admin.register(ManagedItem)

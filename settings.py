@@ -32,6 +32,10 @@ INSTALLED_APPS = [
     'isomanager.apps.IsomanagerConfig',
     'recurrence',
     'django_json_widget',
+    'dal',
+    'dal_select2',
+    'dal_select2_queryset_sequence',
+    'admin_auto_filters',
 
     'django.contrib.admindocs',
     'django.contrib.admin',

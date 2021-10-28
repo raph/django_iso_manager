@@ -29,6 +29,7 @@ class OsArch(models.TextChoices):
     X86 = 'X86', _('x86')
     AMD64 = 'AMD64', _('amd64')
     ARMV8 = 'ARMV8', _('ArmV8')
+    DARWIN_ARM64 = 'DARWIN_ARM64', _('darwin_arm64')
 
 
 class OsLanguage(models.TextChoices):

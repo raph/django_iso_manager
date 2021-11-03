@@ -39,4 +39,3 @@ class OsLanguage(models.TextChoices):
 class VersionScheme(models.TextChoices):
     SEMVER = 'SEM', 'SemVer'
     CALVER = 'CAL', 'CalVer'
-

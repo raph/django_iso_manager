@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 import recurrence.fields
@@ -5,10 +6,13 @@ from django.db import models
 from django.utils.translation import gettext as _
 
 from isomanager.choices import AuthType, DatastoreType, OsArch, OsLanguage, OsType
+from isomanager.mixins.model_mixins import TimeMixin
 from isomanager.utils import hash
 
+logger = logging.getLogger(__name__)
 
-class Datastore(models.Model):
+
+class Datastore(TimeMixin):
     """
     The datastore class used to list monitored folder
     """
@@ -23,12 +27,16 @@ class Datastore(models.Model):
     # TODO: match to a library item
     def scan(self):
         p = Path(self.location)
-        paths = list(p.glob('**/*.iso'.format(self.location)))
-        print(paths)
-        for path in paths:
+        for path in p.glob('**/*.iso'):
             checksum = hash(path)
+            catalog_time = None
             print(checksum)
-            item = ManagedItem.objects.get_or_create(datastore=self, full_path=path, sha256sum=checksum)
+            try:
+                catalog_time = CatalogItem.objects.get(sha256sum=checksum)
+            except CatalogItem.DoesNotExist:
+                logger.error(f'no catalog item were found with checksum: {checksum}')
+                pass
+            item = ManagedItem.objects.get_or_create(datastore=self, full_path=path, sha256sum=checksum, library_item=catalog_time)
             print(item)
 
     def __str__(self):
@@ -40,7 +48,7 @@ class Datastore(models.Model):
         ordering = ['-last_scan']
 
 
-class RemoteCatalog(models.Model):
+class RemoteCatalog(TimeMixin):
     """
     The public catalog of ISO images
     """
@@ -60,15 +68,19 @@ class RemoteCatalog(models.Model):
         ordering = ['-priority']
 
 
-class OsEdition(models.Model):
-    os_edition_name = models.CharField(_('OS Edition'), help_text=_('The edition of the OS'), max_length=32, unique=True)
-    os_edition_version = models.CharField(_('Version Number'), help_text=_('The version number of the item'), max_length=32, unique=True)
-    os_edition_arch = models.CharField(_('OS Architecture'), help_text=_('The architecture of the OS'), max_length=16, choices=OsArch.choices, default=OsArch.AMD64, unique=True)
-    os_edition_language = models.CharField(_('Language'), help_text=_('The language of the item in the catalog'), choices=OsLanguage.choices, max_length=64, unique=True)
+class OsEdition(TimeMixin):
+    os_edition_type = models.CharField(_('OS Type'), help_text=_('The type of image'), max_length=16, choices=OsType.choices, default=OsType.LINUX)
+    os_edition_name = models.CharField(_('OS Edition'), help_text=_('The edition of the OS'), max_length=32)
+    os_edition_version = models.CharField(_('Version Number'), help_text=_('The version number of the item'), max_length=32)
+    os_edition_arch = models.CharField(_('OS Architecture'), help_text=_('The architecture of the OS'), max_length=16, choices=OsArch.choices, default=OsArch.AMD64)
+    os_edition_language = models.CharField(_('Language'), help_text=_('The language of the item in the catalog'), choices=OsLanguage.choices, max_length=64)
 
     # FIXME: wrong format
     def __str__(self):
-        return "{0} - {1}".format(self.os_edition_name, self.os_edition_version, self.os_edition_arch, self.os_edition_language)
+        return "{0} - {1} - {2} - {3} - {4}".format(
+            self.os_edition_type, self.os_edition_name,
+            self.os_edition_version, self.os_edition_arch, self.os_edition_language
+        )
 
     class Meta:
         verbose_name = _('OS Edition')
@@ -76,22 +88,21 @@ class OsEdition(models.Model):
         unique_together = ("os_edition_name", "os_edition_version", "os_edition_arch", "os_edition_language")
 
 
-class CatalogItem(models.Model):
+class CatalogItem(TimeMixin):
     """
     The local image Catalog model
     """
-    download_urls = models.JSONField,
+    download_urls = models.JSONField(_("Download URLS"), default=list)
     last_update = models.DateTimeField(_('Last Update'), help_text=_('Time last scanned'))
     version_scheme = models.CharField(_('Version Scheme'), help_text=_('The version scheme being used'), max_length=3)
     maintainer = models.CharField(_('Maintainer'), help_text=_('The version number of the item'), max_length=255)
     sha256sum = models.CharField(_('SHA256 Checksum'), help_text=_('The SHA256 checksum of the item'), max_length=64, unique=True)
-    os_type = models.CharField(_('OS Type'), help_text=_('The type of image'), max_length=16, choices=OsType.choices, default=OsType.LINUX)
     os_edition = models.ForeignKey('OsEdition', help_text=_('The edition of the OS'), max_length=32, on_delete=models.DO_NOTHING)
     detached_from_head = models.BooleanField(_('Detached from head'), help_text=_('True if the item has been manually edited'))
     release_date = models.DateTimeField(_('Release date'), help_text=_('The release date of this version'))
 
     def __str__(self):
-        return "{0} {1}".format(self.os_edition, self.version_number)
+        return "{0} {1}".format(self.os_edition, self.maintainer)
 
     class Meta:
         verbose_name = _('Catalog Item')
@@ -99,7 +110,7 @@ class CatalogItem(models.Model):
         ordering = ['-release_date']
 
 
-class UpdateTarget(models.Model):
+class UpdateTarget(TimeMixin):
     """
     The list of items to be downloaded and updated
     """
@@ -117,7 +128,7 @@ class UpdateTarget(models.Model):
         verbose_name_plural = _('Auto-Update Targets')
 
 
-class ManagedItem(models.Model):
+class ManagedItem(TimeMixin):
     """"
     scans :model:`isomanager.Datastore`.
     The library of ISO images detected locally (updated by folder scan)

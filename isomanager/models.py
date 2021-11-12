@@ -87,8 +87,6 @@ class RemoteCatalog(TimeMixin):
         }
         """
         for image_name, image_data in self.json_catalog['images'].items():
-            print(f'Name: {image_name}')
-            print(f'Data: {image_data}')
             CatalogItem.objects.create(
                 download_urls=image_data["download_urls"],
                 last_update=image_data["last_update"],

@@ -1,3 +1,5 @@
+from import_export.admin import ImportExportModelAdmin
+
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin, messages
 from django.db.models import JSONField
@@ -31,7 +33,7 @@ class DatastoreAdmin(admin.ModelAdmin):
 
 
 @admin.register(RemoteCatalog)
-class RemoteCatalog(admin.ModelAdmin):
+class RemoteCatalog(ImportExportModelAdmin):
     list_display = ('catalog_name', 'version', 'remote_url', 'auto_update', 'priority', 'created_time', 'updated_time')
     list_filter = ('auto_update',)
     date_hierarchy = 'created_time'

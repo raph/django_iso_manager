@@ -61,8 +61,43 @@ class RemoteCatalog(TimeMixin):
     priority = models.CharField(_('Priority'), help_text=_('Catalog items with higher priority will override those with lower priority'), max_length=3, unique=True)
 
     def populate_cat_items(self):
-        for k, v in self.json_catalog.items():
-            print(f'Key: {k}\nValue: {v}')
+        """
+        Test json used:
+        {
+          "images": {
+            "image_1": {
+              "download_urls": "data1",
+              "last_update": "2018-11-20T15:58:44.767594-06:00",
+              "version_scheme": "data3",
+              "maintainer": "data4",
+              "sha256sum": "data5",
+              "detached_from_head": false,
+              "release_date": "2018-11-20T15:58:44.767594-06:00"
+            },
+            "image_2": {
+              "download_urls": "data1",
+              "last_update": "2018-11-20T15:58:44.767594-06:00",
+              "version_scheme": "data3",
+              "maintainer": "data4",
+              "sha256sum": "data51",
+              "detached_from_head": true,
+              "release_date": "2018-11-20T15:58:44.767594-06:00"
+            }
+          }
+        }
+        """
+        for image_name, image_data in self.json_catalog['images'].items():
+            print(f'Name: {image_name}')
+            print(f'Data: {image_data}')
+            CatalogItem.objects.create(
+                download_urls=image_data["download_urls"],
+                last_update=image_data["last_update"],
+                version_scheme=image_data["version_scheme"],
+                maintainer=image_data["maintainer"],
+                sha256sum=image_data["sha256sum"],
+                detached_from_head=image_data["detached_from_head"],
+                release_date=image_data["release_date"],
+            )
 
     def __str__(self):
         return "{0}".format(self.catalog_name)
@@ -102,7 +137,7 @@ class CatalogItem(TimeMixin):
     version_scheme = models.CharField(_('Version Scheme'), help_text=_('The version scheme being used'), max_length=3)
     maintainer = models.CharField(_('Maintainer'), help_text=_('The version number of the item'), max_length=255)
     sha256sum = models.CharField(_('SHA256 Checksum'), help_text=_('The SHA256 checksum of the item'), max_length=64, unique=True)
-    os_edition = models.ForeignKey('OsEdition', help_text=_('The edition of the OS'), max_length=32, on_delete=models.DO_NOTHING, null=True)
+    os_edition = models.ForeignKey('OsEdition', help_text=_('The edition of the OS'), max_length=32, on_delete=models.DO_NOTHING, blank=True, null=True)
     detached_from_head = models.BooleanField(_('Detached from head'), help_text=_('True if the item has been manually edited'))
     release_date = models.DateTimeField(_('Release date'), help_text=_('The release date of this version'))
 

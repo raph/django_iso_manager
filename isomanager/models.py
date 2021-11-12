@@ -1,3 +1,4 @@
+import json
 import logging
 from pathlib import Path
 
@@ -59,6 +60,9 @@ class RemoteCatalog(TimeMixin):
     auto_update = models.BooleanField(_('Auto Update'), help_text=_('Auto update the JSON catalog'), default=True)
     priority = models.CharField(_('Priority'), help_text=_('Catalog items with higher priority will override those with lower priority'), max_length=3, unique=True)
 
+    def populate_cat_items(self):
+        item_list = json.loads(self.json_catalog)
+
     def __str__(self):
         return "{0}".format(self.catalog_name)
 
@@ -97,7 +101,7 @@ class CatalogItem(TimeMixin):
     version_scheme = models.CharField(_('Version Scheme'), help_text=_('The version scheme being used'), max_length=3)
     maintainer = models.CharField(_('Maintainer'), help_text=_('The version number of the item'), max_length=255)
     sha256sum = models.CharField(_('SHA256 Checksum'), help_text=_('The SHA256 checksum of the item'), max_length=64, unique=True)
-    os_edition = models.ForeignKey('OsEdition', help_text=_('The edition of the OS'), max_length=32, on_delete=models.DO_NOTHING)
+    os_edition = models.ForeignKey('OsEdition', help_text=_('The edition of the OS'), max_length=32, on_delete=models.DO_NOTHING, null=True)
     detached_from_head = models.BooleanField(_('Detached from head'), help_text=_('True if the item has been manually edited'))
     release_date = models.DateTimeField(_('Release date'), help_text=_('The release date of this version'))
 

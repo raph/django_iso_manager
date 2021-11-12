@@ -62,29 +62,7 @@ class RemoteCatalog(TimeMixin):
 
     def populate_cat_items(self):
         """
-        Test json used:
-        {
-          "images": {
-            "image_1": {
-              "download_urls": "data1",
-              "last_update": "2018-11-20T15:58:44.767594-06:00",
-              "version_scheme": "data3",
-              "maintainer": "data4",
-              "sha256sum": "data5",
-              "detached_from_head": false,
-              "release_date": "2018-11-20T15:58:44.767594-06:00"
-            },
-            "image_2": {
-              "download_urls": "data1",
-              "last_update": "2018-11-20T15:58:44.767594-06:00",
-              "version_scheme": "data3",
-              "maintainer": "data4",
-              "sha256sum": "data51",
-              "detached_from_head": true,
-              "release_date": "2018-11-20T15:58:44.767594-06:00"
-            }
-          }
-        }
+        Populates catalog items from json_catalog, assumes necessary data is present and in correct format
         """
         for image_name, image_data in self.json_catalog['images'].items():
             CatalogItem.objects.create(

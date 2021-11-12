@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'dal_select2',
     'dal_select2_queryset_sequence',
     'admin_auto_filters',
+    'import_export',
 
     'django.contrib.admindocs',
     'django.contrib.admin',
@@ -126,3 +127,6 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# django-import-export settings
+IMPORT_EXPORT_USE_TRANSACTIONS = True

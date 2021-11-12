@@ -61,7 +61,8 @@ class RemoteCatalog(TimeMixin):
     priority = models.CharField(_('Priority'), help_text=_('Catalog items with higher priority will override those with lower priority'), max_length=3, unique=True)
 
     def populate_cat_items(self):
-        item_list = json.loads(self.json_catalog)
+        for k, v in self.json_catalog.items():
+            print(f'Key: {k}\nValue: {v}')
 
     def __str__(self):
         return "{0}".format(self.catalog_name)

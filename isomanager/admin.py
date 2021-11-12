@@ -43,6 +43,14 @@ class RemoteCatalog(ImportExportModelAdmin):
     }
     change_form_template = "isomanager/admin/remote-cat-populate-items-form.html"
 
+    def response_change(self, request, obj):
+        if "populate_cat_items" in request.POST:
+            obj.populate_cat_items()
+            messages.success(request, 'Populating catalog items from JSON catalog is done.')
+            return HttpResponseRedirect(".")  # stay on the same detail page
+
+        return super().response_change(request, obj)
+
 
 @admin.register(CatalogItem)
 class CatalogItemAdmin(admin.ModelAdmin):

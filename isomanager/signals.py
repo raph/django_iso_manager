@@ -13,9 +13,9 @@ def datastore_post_save(sender, instance, created, raw=False, **kwargs):
         instance.scan()
 
 @receiver(post_save, sender=RemoteCatalog)
-def datastore_post_save(sender, instance, created, raw=False, **kwargs):
+def remote_catalog_post_save(sender, instance, created, raw=False, **kwargs):
     """
     post save signal in order to create catalog items from json catalog
     """
     if created:
-        instance.populate_items()
+        instance.populate_cat_items()

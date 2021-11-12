@@ -15,3 +15,4 @@ class OSAutocomplete(autocomplete.Select2QuerySetView):
                 Q(os_edition_arch__icontains=self.q)
             )
         return qs
+

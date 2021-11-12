@@ -41,6 +41,7 @@ class RemoteCatalog(ImportExportModelAdmin):
     formfield_overrides = {
         JSONField: {'widget': JSONEditorWidget},
     }
+    change_form_template = "isomanager/admin/remote-cat-populate-items-form.html"
 
 
 @admin.register(CatalogItem)

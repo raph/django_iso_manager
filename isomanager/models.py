@@ -90,6 +90,8 @@ class OsEdition(TimeMixin):
     os_edition_version = models.CharField(_('Version Number'), help_text=_('The version number of the item'), max_length=32)
     os_edition_arch = models.CharField(_('OS Architecture'), help_text=_('The architecture of the OS'), max_length=16, choices=OsArch.choices, default=OsArch.AMD64)
     os_edition_language = models.CharField(_('Language'), help_text=_('The language of the item in the catalog'), choices=OsLanguage.choices, max_length=64)
+    # os_edition_version_scheme = models.CharField()
+    # os_edition_description = models.CharField()
 
     # FIXME: wrong format
     def __str__(self):
@@ -108,17 +110,41 @@ class CatalogItem(TimeMixin):
     """
     The local image Catalog model
     """
-    download_urls = models.JSONField(_("Download URLS"), default=list)
-    last_update = models.DateTimeField(_('Last Update'), help_text=_('Time last scanned'))
-    version_scheme = models.CharField(_('Version Scheme'), help_text=_('The version scheme being used'), max_length=3)
-    maintainer = models.CharField(_('Maintainer'), help_text=_('The version number of the item'), max_length=255)
-    sha256sum = models.CharField(_('SHA256 Checksum'), help_text=_('The SHA256 checksum of the item'), max_length=64, unique=True)
-    os_edition = models.ForeignKey('OsEdition', help_text=_('The edition of the OS'), max_length=32, on_delete=models.DO_NOTHING, blank=True, null=True)
-    detached_from_head = models.BooleanField(_('Detached from head'), help_text=_('True if the item has been manually edited'))
+
+    ### Old model
+    # download_urls = models.JSONField(_("Download URLS"), default=list)
+    # last_update = models.DateTimeField(_('Last Update'), help_text=_('Time last scanned'))
+    # version_scheme = models.CharField(_('Version Scheme'), help_text=_('The version scheme being used'), max_length=3)
+    # maintainer = models.CharField(_('Maintainer'), help_text=_('The version number of the item'), max_length=255)
+    # sha256sum = models.CharField(_('SHA256 Checksum'), help_text=_('The SHA256 checksum of the item'), max_length=64, unique=True)
+    # os_edition = models.ForeignKey('OsEdition', help_text=_('The edition of the OS'), max_length=32, on_delete=models.DO_NOTHING, blank=True, null=True)
+    # detached_from_head = models.BooleanField(_('Detached from head'), help_text=_('True if the item has been manually edited'))
+    # release_date = models.DateTimeField(_('Release date'), help_text=_('The release date of this version'))
+
+    ### New model
+    os_type = models.CharField(_('OS Type'), help_text=_('The type of the OS'), max_length=32)
+    os_edition_name = models.CharField(_('OS Edition Name'), help_text=_('Name of the the edition of the OS'), max_length=32)
+    os_arch = models.CharField(_('OS Architecture'), help_text=_('The Architecture of the OS'), max_length=32)
+    description = models.CharField(_('Description'), help_text=_('Item description'), max_length=100)
+    keywords = models.CharField(_('Keywords'), help_text=_('Related keywords'), max_length=255)
+    version_scheme = models.CharField(_('OS Version Scheme'), help_text=_('Version scheme of the OS'), max_length=32)
+    version = models.CharField(_('OS Version'), help_text=_('The version of the OS'), max_length=32)
+    language = models.CharField(_('OS Language'), help_text=_('The language of the OS'), max_length=32)
+    original_filename = models.CharField(_('Filename'), help_text=_('The original filename of the item'), max_length=255)
+    sha256sum = models.CharField(_('SHA256 Checksum'), help_text=_('SHA256 Checksum for this file'), max_length=255)
+    sha256sumgpg = models.TextField(_('GPG key'), help_text=_('GPG key of the checksum'))
+    private = models.BooleanField(_('Private'), help_text=_('Private'), default=False)
+    author = models.CharField(_('OS Author'), help_text=_('The author of the OS'), max_length=32)
+    last_update = models.DateTimeField(_('Last Update'), help_text=_('Time last scanned'), auto_now=True)
     release_date = models.DateTimeField(_('Release date'), help_text=_('The release date of this version'))
+    homepage_url = models.CharField(_('Homepage URL'), help_text=_('URL of the OS homepage'), max_length=255)
+    documentation_url = models.CharField(_('OS Documentation URL'), help_text=_('URL of the OS documentation'), max_length=255)
+    contributors = models.CharField(_('Contributors'), help_text=_('Contributors'), max_length=255)
+    download_urls = models.JSONField(_('URLs to download OS'), help_text=_('The JSON object containing URLs to download the OS'))
+
 
     def __str__(self):
-        return "{0} {1}".format(self.os_edition, self.maintainer)
+        return "{0} {1}".format(self.os_edition_name, self.maintainer)
 
     class Meta:
         verbose_name = _('Catalog Item')

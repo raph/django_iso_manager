@@ -56,9 +56,9 @@ class RemoteCatalog(ImportExportModelAdmin):
 class CatalogItemAdmin(admin.ModelAdmin):
     form = CatalogItemForm
     list_display = ('sha256sum', 'os_edition_name', 'release_date', 'created_time')
-    # list_filter = ('detached_from_head', OsEditionFilter)
+    list_filter = (OsEditionFilter,)
     search_fields = ('sha256sum',)
-    # raw_id_fields = ('os_edition_name',)
+    raw_id_fields = ('os_edition',)
     date_hierarchy = 'created_time'
     formfield_overrides = {
         JSONField: {'widget': JSONEditorWidget},
@@ -74,6 +74,9 @@ class OsEditionAdmin(admin.ModelAdmin):
     list_filter = ('os_edition_arch', 'os_edition_language')
     search_fields = ('os_edition_type', 'os_edition_name', 'os_edition_version', 'os_edition_arch', 'os_edition_language',)
 
+class OsEditionFilter(AutocompleteFilter):
+    title = 'OS'
+    field_name = 'os_edition'
 
 @admin.register(ManagedItem)
 class ManagedItemAdmin(admin.ModelAdmin):

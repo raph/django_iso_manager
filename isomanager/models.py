@@ -134,6 +134,7 @@ class CatalogItem(TimeMixin):
     # release_date = models.DateTimeField(_('Release date'), help_text=_('The release date of this version'))
 
     ### New model
+    os_edition = models.ForeignKey('OsEdition', help_text=_('The edition of the OS'), max_length=32, on_delete=models.DO_NOTHING, blank=True, null=True)
     os_type = models.CharField(_('OS Type'), help_text=_('The type of the OS'), max_length=32)
     os_edition_name = models.CharField(_('OS Edition Name'), help_text=_('Name of the the edition of the OS'), max_length=32)
     os_arch = models.CharField(_('OS Architecture'), help_text=_('The Architecture of the OS'), max_length=32)

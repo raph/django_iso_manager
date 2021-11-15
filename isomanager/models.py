@@ -90,8 +90,8 @@ class OsEdition(TimeMixin):
     os_edition_version = models.CharField(_('Version Number'), help_text=_('The version number of the item'), max_length=32)
     os_edition_arch = models.CharField(_('OS Architecture'), help_text=_('The architecture of the OS'), max_length=16, choices=OsArch.choices, default=OsArch.AMD64)
     os_edition_language = models.CharField(_('Language'), help_text=_('The language of the item in the catalog'), choices=OsLanguage.choices, max_length=64)
-    # os_edition_version_scheme = models.CharField()
-    # os_edition_description = models.CharField()
+    os_edition_version_scheme = models.CharField(_('OS Version Scheme'), help_text=_('The version scheme of the OS'), max_length=32)
+    os_edition_description = models.CharField(_('OS description'), help_text=_('Description of the OS'), max_length=32)
 
     # FIXME: wrong format
     def __str__(self):

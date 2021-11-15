@@ -55,10 +55,10 @@ class RemoteCatalog(ImportExportModelAdmin):
 @admin.register(CatalogItem)
 class CatalogItemAdmin(admin.ModelAdmin):
     form = CatalogItemForm
-    list_display = ('sha256sum', 'maintainer', 'os_edition', 'release_date', 'detached_from_head', 'created_time')
-    list_filter = ('detached_from_head', OsEditionFilter)
+    list_display = ('sha256sum', 'os_edition_name', 'release_date', 'created_time')
+    # list_filter = ('detached_from_head', OsEditionFilter)
     search_fields = ('sha256sum',)
-    raw_id_fields = ('os_edition',)
+    # raw_id_fields = ('os_edition_name',)
     date_hierarchy = 'created_time'
     formfield_overrides = {
         JSONField: {'widget': JSONEditorWidget},

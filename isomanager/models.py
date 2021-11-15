@@ -144,7 +144,7 @@ class CatalogItem(TimeMixin):
 
 
     def __str__(self):
-        return "{0} {1}".format(self.os_edition_name, self.maintainer)
+        return "{0} {1}".format(self.os_edition_name, self.author)
 
     class Meta:
         verbose_name = _('Catalog Item')

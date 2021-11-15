@@ -66,13 +66,25 @@ class RemoteCatalog(TimeMixin):
         """
         for image_name, image_data in self.json_catalog['images'].items():
             CatalogItem.objects.create(
-                download_urls=image_data["download_urls"],
-                last_update=image_data["last_update"],
+                os_type=image_data["os_type"],
+                os_edition_name=image_data["os_edition_name"],
+                os_arch=image_data["os_arch"],
+                description=image_data["description"],
+                keywords=image_data["keywords"],
                 version_scheme=image_data["version_scheme"],
-                maintainer=image_data["maintainer"],
+                version=image_data["version"],
+                language=image_data["language"],
+                original_filename=image_data["original_filename"],
                 sha256sum=image_data["sha256sum"],
-                detached_from_head=image_data["detached_from_head"],
+                sha256sum_gpg=image_data["sha256sum_gpg"],
+                private=image_data["private"],
+                author=image_data["author"],
+                last_update=image_data["last_update"],
                 release_date=image_data["release_date"],
+                homepage_url=image_data["homepage_url"],
+                documentation_url=image_data["documentation_url"],
+                contributors=image_data["contributors"],
+                download_urls=image_data["download_urls"],
             )
 
     def __str__(self):
@@ -132,7 +144,7 @@ class CatalogItem(TimeMixin):
     language = models.CharField(_('OS Language'), help_text=_('The language of the OS'), max_length=32)
     original_filename = models.CharField(_('Filename'), help_text=_('The original filename of the item'), max_length=255)
     sha256sum = models.CharField(_('SHA256 Checksum'), help_text=_('SHA256 Checksum for this file'), max_length=255)
-    sha256sumgpg = models.TextField(_('GPG key'), help_text=_('GPG key of the checksum'))
+    sha256sum_gpg = models.TextField(_('GPG key'), help_text=_('GPG key of the checksum'))
     private = models.BooleanField(_('Private'), help_text=_('Private'), default=False)
     author = models.CharField(_('OS Author'), help_text=_('The author of the OS'), max_length=32)
     last_update = models.DateTimeField(_('Last Update'), help_text=_('Time last scanned'), auto_now=True)

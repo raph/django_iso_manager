@@ -53,7 +53,7 @@ class RemoteCatalog(ImportExportModelAdmin):
 
 
 @admin.register(CatalogItem)
-class CatalogItemAdmin(admin.ModelAdmin):
+class CatalogItemAdmin(ImportExportModelAdmin):
     form = CatalogItemForm
     list_display = ('sha256sum', 'os_edition_name', 'release_date', 'created_time')
     list_filter = (OsEditionFilter,)
@@ -63,6 +63,10 @@ class CatalogItemAdmin(admin.ModelAdmin):
     formfield_overrides = {
         JSONField: {'widget': JSONEditorWidget},
     }
+
+    class Meta:
+        model = CatalogItem
+        exclude = ('os_edition',)
 
 
 @admin.register(OsEdition)

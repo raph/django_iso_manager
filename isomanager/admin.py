@@ -51,7 +51,7 @@ class RemoteCatalog(ImportExportModelAdmin):
 @admin.register(CatalogItem)
 class CatalogItemAdmin(ImportExportModelAdmin):
     # form = CatalogItemForm
-    list_display = ('sha256sum', 'os_edition_name', 'release_date', 'created_time')
+    list_display = ('os_edition_name', 'sha256sum', 'release_date', 'created_time')
     # list_filter = (OsEditionFilter,)
     search_fields = ('sha256sum',)
     # raw_id_fields = ('os_edition',)

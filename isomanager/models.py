@@ -64,28 +64,29 @@ class RemoteCatalog(TimeMixin):
         """
         Populates catalog items from json_catalog, assumes necessary data is present and in correct format
         """
-        for image_name, image_data in self.json_catalog['images'].items():
-            CatalogItem.objects.create(
-                os_type=image_data["os_type"],
-                os_edition_name=image_data["os_edition_name"],
-                os_arch=image_data["os_arch"],
-                description=image_data["description"],
-                keywords=image_data["keywords"],
-                version_scheme=image_data["version-scheme"],
-                version=image_data["version"],
-                language=image_data["language"],
-                original_filename=image_data["original-filename"],
-                sha256sum=image_data["sha256sum"],
-                sha256sum_gpg=image_data["sha256sumgpg"],
-                private=image_data["private"],
-                author=image_data["author"],
-                last_update=image_data["lastupdate"],
-                release_date=image_data["releasedate"],
-                homepage_url=image_data["homepageurl"],
-                documentation_url=image_data["documentationurl"],
-                contributors=image_data["contributors"],
-                download_urls=image_data["download_urls"],
-            )
+        pass
+        # for image_name, image_data in self.json_catalog['images'].items():
+        #     CatalogItem.objects.create(
+        #         os_type=image_data["os_type"],
+        #         os_edition_name=image_data["os_edition_name"],
+        #         os_arch=image_data["os_arch"],
+        #         description=image_data["description"],
+        #         keywords=image_data["keywords"],
+        #         version_scheme=image_data["version-scheme"],
+        #         version=image_data["version"],
+        #         language=image_data["language"],
+        #         original_filename=image_data["original-filename"],
+        #         sha256sum=image_data["sha256sum"],
+        #         sha256sum_gpg=image_data["sha256sumgpg"],
+        #         private=image_data["private"],
+        #         author=image_data["author"],
+        #         last_update=image_data["lastupdate"],
+        #         release_date=image_data["releasedate"],
+        #         homepage_url=image_data["homepageurl"],
+        #         documentation_url=image_data["documentationurl"],
+        #         contributors=image_data["contributors"],
+        #         download_urls=image_data["download_urls"],
+        #     )
 
     def __str__(self):
         return "{0}".format(self.catalog_name)

@@ -70,33 +70,34 @@ class RemoteCatalog(TimeMixin):
         """
         Populates catalog items from json_catalog, assumes necessary data is present and in correct format
         """
-        for item in self.json_catalog:
-            CatalogItem.objects.update_or_create(
-                # Check if catalog item with this checksum exists
-                sha256sum=item["sha256sum"],
-                # If not create a new object
-                defaults={
-                    "os_type": item["os_type"],
-                    "os_edition_name": item["os_edition_name"],
-                    "os_arch": item["os_arch"],
-                    "description": item["description"],
-                    "keywords": item["keywords"],
-                    "version_scheme": item["version_scheme"],
-                    "version": item["version"],
-                    "language": item["language"],
-                    "original_filename": item["original_filename"],
-                    "sha256sum": item["sha256sum"],
-                    "sha256sum_gpg": item["sha256sum_gpg"],
-                    "private": item["private"],
-                    "author": item["author"],
-                    "last_update": item["last_update"],
-                    "release_date": item["release_date"],
-                    "homepage_url": item["homepage_url"],
-                    "documentation_url": item["documentation_url"],
-                    "contributors": item["contributors"],
-                    "download_urls": item["download_urls"],
-                }
-            )
+        pass
+        # for item in self.json_catalog:
+        #     CatalogItem.objects.update_or_create(
+        #         # Check if catalog item with this checksum exists
+        #         sha256sum=item["sha256sum"],
+        #         # If not create a new object
+        #         defaults={
+        #             "os_type": item["os_type"],
+        #             "os_edition_name": item["os_edition_name"],
+        #             "os_arch": item["os_arch"],
+        #             "description": item["description"],
+        #             "keywords": item["keywords"],
+        #             "version_scheme": item["version_scheme"],
+        #             "version": item["version"],
+        #             "language": item["language"],
+        #             "original_filename": item["original_filename"],
+        #             "sha256sum": item["sha256sum"],
+        #             "sha256sum_gpg": item["sha256sum_gpg"],
+        #             "private": item["private"],
+        #             "author": item["author"],
+        #             "last_update": item["last_update"],
+        #             "release_date": item["release_date"],
+        #             "homepage_url": item["homepage_url"],
+        #             "documentation_url": item["documentation_url"],
+        #             "contributors": item["contributors"],
+        #             "download_urls": item["download_urls"],
+        #         }
+        #     )
 
     def __str__(self):
         return "{0}".format(self.catalog_name)

@@ -6,13 +6,9 @@ from django.db.models import JSONField
 from django.http import HttpResponseRedirect
 from django_json_widget.widgets import JSONEditorWidget
 
-from .forms import CatalogItemForm
-from .models import CatalogItem, Datastore, ManagedItem, OsEdition, RemoteCatalog, UpdateTarget
+# from .forms import CatalogItemForm
+from .models import CatalogItem, Datastore, ManagedItem, RemoteCatalog, UpdateTarget
 
-
-class OsEditionFilter(AutocompleteFilter):
-    title = 'Os Edition'  # display title
-    field_name = 'os_edition'  # name of the foreign key field
 
 
 # Register your models here.
@@ -54,11 +50,11 @@ class RemoteCatalog(ImportExportModelAdmin):
 
 @admin.register(CatalogItem)
 class CatalogItemAdmin(ImportExportModelAdmin):
-    form = CatalogItemForm
+    # form = CatalogItemForm
     list_display = ('sha256sum', 'os_edition_name', 'release_date', 'created_time')
-    list_filter = (OsEditionFilter,)
+    # list_filter = (OsEditionFilter,)
     search_fields = ('sha256sum',)
-    raw_id_fields = ('os_edition',)
+    # raw_id_fields = ('os_edition',)
     date_hierarchy = 'created_time'
     formfield_overrides = {
         JSONField: {'widget': JSONEditorWidget},
@@ -66,21 +62,21 @@ class CatalogItemAdmin(ImportExportModelAdmin):
 
     class Meta:
         model = CatalogItem
-        exclude = ('os_edition',)
 
 
-@admin.register(OsEdition)
-class OsEditionAdmin(admin.ModelAdmin):
-    list_display = (
-        'os_edition_type', 'os_edition_name', 'os_edition_version',
-        'os_edition_arch', 'os_edition_language', 'created_time', 'updated_time'
-    )
-    list_filter = ('os_edition_arch', 'os_edition_language')
-    search_fields = ('os_edition_type', 'os_edition_name', 'os_edition_version', 'os_edition_arch', 'os_edition_language',)
 
-class OsEditionFilter(AutocompleteFilter):
-    title = 'OS'
-    field_name = 'os_edition'
+# @admin.register(OsEdition)
+# class OsEditionAdmin(admin.ModelAdmin):
+#     list_display = (
+#         'os_edition_type', 'os_edition_name', 'os_edition_version',
+#         'os_edition_arch', 'os_edition_language', 'created_time', 'updated_time'
+#     )
+#     list_filter = ('os_edition_arch', 'os_edition_language')
+#     search_fields = ('os_edition_type', 'os_edition_name', 'os_edition_version', 'os_edition_arch', 'os_edition_language',)
+#
+# class OsEditionFilter(AutocompleteFilter):
+#     title = 'OS'
+#     field_name = 'os_edition'
 
 @admin.register(ManagedItem)
 class ManagedItemAdmin(admin.ModelAdmin):

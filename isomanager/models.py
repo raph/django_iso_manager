@@ -70,34 +70,34 @@ class RemoteCatalog(TimeMixin):
         """
         Populates catalog items from json_catalog, assumes necessary data is present and in correct format
         """
-        pass
-        # for item in self.json_catalog:
-        #     CatalogItem.objects.update_or_create(
-        #         # Check if catalog item with this checksum exists
-        #         sha256sum=item["sha256sum"],
-        #         # If not create a new object
-        #         defaults={
-        #             "os_type": item["os_type"],
-        #             "os_edition_name": item["os_edition_name"],
-        #             "os_arch": item["os_arch"],
-        #             "description": item["description"],
-        #             "keywords": item["keywords"],
-        #             "version_scheme": item["version_scheme"],
-        #             "version": item["version"],
-        #             "language": item["language"],
-        #             "original_filename": item["original_filename"],
-        #             "sha256sum": item["sha256sum"],
-        #             "sha256sum_gpg": item["sha256sum_gpg"],
-        #             "private": item["private"],
-        #             "author": item["author"],
-        #             "last_update": item["last_update"],
-        #             "release_date": item["release_date"],
-        #             "homepage_url": item["homepage_url"],
-        #             "documentation_url": item["documentation_url"],
-        #             "contributors": item["contributors"],
-        #             "download_urls": item["download_urls"],
-        #         }
-        #     )
+        for item in self.json_catalog:
+            CatalogItem.objects.update_or_create(
+                # Check if catalog item with this checksum exists
+                sha256sum=item["sha256sum"],
+                # If not create a new object
+                defaults={
+                    "os_edition_type": item["os_edition_type"],
+                    "os_edition_name": item["os_edition_name"],
+                    "os_edition_version": item["os_edition_version"],
+                    "os_edition_arch": item["os_edition_arch"],
+                    "os_edition_language": item["os_edition_language"],
+                    "os_edition_version_scheme": item["os_edition_version_scheme"],
+                    "os_edition_description": item["os_edition_description"],
+                    "contributors": item["contributors"],
+                    "author": item["author"],
+                    "private": item["private"],
+                    "sha256sum": item["sha256sum"],
+                    "sha256sum_gpg": item["sha256sum_gpg"],
+                    "release_date": item["release_date"],
+                    "description": item["description"],
+                    "keywords": item["keywords"],
+                    "original_filename": item["original_filename"],
+                    "last_update": item["last_update"],
+                    "homepage_url": item["homepage_url"],
+                    "documentation_url": item["documentation_url"],
+                    "download_urls": item["download_urls"],
+                }
+            )
 
     def __str__(self):
         return "{0}".format(self.catalog_name)
@@ -106,33 +106,6 @@ class RemoteCatalog(TimeMixin):
         verbose_name = _('Catalog')
         verbose_name_plural = _('Catalogs')
         ordering = ['-priority']
-
-
-# class OsEdition(TimeMixin):
-#     os_edition_type = models.CharField(_('OS Type'), help_text=_('The type of image'), max_length=16,
-#                                        choices=OsType.choices, default=OsType.LINUX)
-#     os_edition_name = models.CharField(_('OS Edition'), help_text=_('The edition of the OS'), max_length=32)
-#     os_edition_version = models.CharField(_('Version Number'), help_text=_('The version number of the item'),
-#                                           max_length=32)
-#     os_edition_arch = models.CharField(_('OS Architecture'), help_text=_('The architecture of the OS'), max_length=16,
-#                                        choices=OsArch.choices, default=OsArch.AMD64)
-#     os_edition_language = models.CharField(_('Language'), help_text=_('The language of the item in the catalog'),
-#                                            choices=OsLanguage.choices, max_length=64)
-#     os_edition_version_scheme = models.CharField(_('OS Version Scheme'), help_text=_('The version scheme of the OS'),
-#                                                  max_length=32)
-#     os_edition_description = models.CharField(_('OS description'), help_text=_('Description of the OS'), max_length=32)
-#
-#     # FIXME: wrong format
-#     def __str__(self):
-#         return "{0} - {1} - {2} - {3} - {4}".format(
-#             self.os_edition_type, self.os_edition_name,
-#             self.os_edition_version, self.os_edition_arch, self.os_edition_language
-#         )
-#
-#     class Meta:
-#         verbose_name = _('OS Edition')
-#         verbose_name_plural = _('OS Edition')
-#         unique_together = ("os_edition_name", "os_edition_version", "os_edition_arch", "os_edition_language")
 
 
 class CatalogItem(TimeMixin):

@@ -1,7 +1,8 @@
 asgiref==3.4.1
+coverage==6.1.2
 defusedxml==0.7.1
 diff-match-patch==20200713
-Django==3.2.9
+Django==3.2.8
 django-admin-autocomplete-filter==0.7.1
 django-autocomplete-light==3.8.2
 django-import-export==2.6.1

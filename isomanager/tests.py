@@ -143,7 +143,7 @@ class TestIsoManager(TestCase):
             library_item=cat_item
         )
 
-        self.assertIsInstance(cat_item, CatalogItem)
+        self.assertIsInstance(man_item, ManagedItem)
         self.assertEqual(man_item.__str__(), f'({man_item.sha256sum}) {man_item.full_path}')
         self.assertEqual(man_item.full_path, 'some/path/to.iso')
         self.assertEqual(man_item.datastore, data_store)

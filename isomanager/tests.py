@@ -8,6 +8,9 @@ class TestIsoManager(TestCase):
     #TODO test DataStore.scan() (problem: scans location with glob)
     #TODO test UpdateTarget (problem: recurrence field)
     #TODO test if RemoteCatalog creation also creates cat items
+    #TODO test admin: DatastoreAdmin.response_change (scan)
+    #TODO test admin: RemoteCatalogAdmin.response_change (populate_cat_items)
+    #TODO test utils: hash()
 
     def setUp(self):
         self.user_staff = get_user_model().objects.create_user(

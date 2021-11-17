@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'dal_select2_queryset_sequence',
     'admin_auto_filters',
     'import_export',
+    'coverage',
 
     'django.contrib.admindocs',
     'django.contrib.admin',

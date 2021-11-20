@@ -18,10 +18,8 @@ First, setup your development environment on AWS using the Elastic beanstalk ser
 the app should use codebuild, autoscaling groups and amazon linux
 
 ### TODO
-- remove id from json export
 - provide json data during first run
 - docs with diagrams
-- issues 
 
 ### The app function includes:
 - [x] Admin management console (django admin)
@@ -33,23 +31,19 @@ the app should use codebuild, autoscaling groups and amazon linux
 - [x] Add ISO with custom name
 - [ ] Filter Catalog items by OS version, version scheme, name, architecture, language
 - [ ] Filter Managed images by OS version, version scheme, name, architecture, language
-- [ ] Filter Auto-update targets by OS version, version scheme, name, architecture, language
 - [x] Select which ISOs are to be managed by the app (managed items)
 - [x] Attach update rules for ISOs for managed items (LTS, Major ver, Minor ver)
 - [x] Select priority for updating catalogs of ISOs
 - [ ] Select download options: bittorrent download, remote library download(nfs, smb s3), remote share storage driver(nfs, smb, s3)
-- [ ] Download all latest from specific os family (or other conditions)
+- [ ] Download all latest images from specific os family (or other conditions)
 - [ ] Verify SHA256 checksum after download
 - [ ] Select whether to keep or delete old version of an ISO after update
 - [ ] Records of downloads (download_list) and deleted items (delete_list)
 - [ ] Custom folder structure (default structure will require the standard Family/OS - Flavor/os.vanilla-1.0.1.iso)
-- [ ] Django-rest-framework integration
 
 ### Example json data for importing an ISO:
 ```
             {
-                "created_time":"2021-11-16 15:06:47",
-                "updated_time":"2021-11-16 15:06:47",
                 "os_edition_type":"LINUX",
                 "os_edition_name":"Ubuntu Server",
                 "os_edition_version":"20.04.3",

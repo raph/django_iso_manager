@@ -2,7 +2,7 @@
 
 Django ISO Manager is a repository replication manager written in Python using the Django Framework.
 
-This Django App manages an ISO repository for Operation Systems (OS) images like Windows or Linux.
+This Django App manages an ISO repository for Operation Systems (OS) images like Windows or Linux. .
 
 ---
 
@@ -12,61 +12,63 @@ This Django App manages an ISO repository for Operation Systems (OS) images like
 - Codebuild
 - Autoscaling groups
 - Amazon Linux AMI
+- Installed packages from [requirements.txt](./requirements.txt) (includes Django and other package)
 
 First, setup your development environment on AWS using the Elastic beanstalk service
 the app should use codebuild, autoscaling groups and amazon linux
 
+### TODO
+- remove id from json export
+- provide json data during first run
+- docs with diagrams
+- issues 
+
 ### The app function includes:
+- [x] Admin management console (django admin)
+- [ ] Scan repository folder and auto-add ISOs
+- [x] Import ISO images into a catalog using json
+- [x] Export ISO catalog data in various formats (json, yaml, csv, html, xlsx, etc.)
+- [ ] Verify SHA256 checksums of the existing images in the datastore
+- [ ] Select how often to update the catalog data from datastore
+- [x] Add ISO with custom name
+- [ ] Filter Catalog items by OS version, version scheme, name, architecture, language
+- [ ] Filter Managed images by OS version, version scheme, name, architecture, language
+- [ ] Filter Auto-update targets by OS version, version scheme, name, architecture, language
+- [x] Select which ISOs are to be managed by the app (managed items)
+- [x] Attach update rules for ISOs for managed items (LTS, Major ver, Minor ver)
+- [x] Select priority for updating catalogs of ISOs
+- [ ] Select download options: bittorrent download, remote library download(nfs, smb s3), remote share storage driver(nfs, smb, s3)
+- [ ] Download all latest from specific os family (or other conditions)
+- [ ] Verify SHA256 checksum after download
+- [ ] Select whether to keep or delete old version of an ISO after update
+- [ ] Records of downloads (download_list) and deleted items (delete_list)
+- [ ] Custom folder structure (default structure will require the standard Family/OS - Flavor/os.vanilla-1.0.1.iso)
+- [ ] Django-rest-framework integration
 
-- Download once
-- Download and update minor version
-- Scan repository folder and auto-add ISO's
-- *(optional) add iso with custom name*
-- *(optional) include the iso checksum in the json as an optional field*
-
-The App should start with:
-- A list of existing  ISO files
-- A JSON file representing the downloaded ISO files with the following data:
-    - Family
-    - Name
-    - Flavor
-    - Major version
-    - Minor version
-    - Patch version
-
-### Example:
+### Example json data for importing an ISO:
 ```
-Family: Linux
-Name: Ubuntu
-Flavor: Server
-major version: 20
-minor version: 04
-patch version: 2
+            {
+                "created_time":"2021-11-16 15:06:47",
+                "updated_time":"2021-11-16 15:06:47",
+                "os_edition_type":"LINUX",
+                "os_edition_name":"Ubuntu Server",
+                "os_edition_version":"20.04.3",
+                "os_edition_arch":"AMD64",
+                "os_edition_language":"ENGLISH",
+                "os_edition_version_scheme":"calver",
+                "os_edition_description":"Ubuntu 20.04.3 LTS (Focal Fossa) Live Server amd64",
+                "contributors":"John Doe, jo@email.com",
+                "author":"Canonical",
+                "private":"0",
+                "sha256sum":"jlkjl",
+                "sha256sum_gpg":"jkljlkj",
+                "release_date":"2021-11-16 15:06:29",
+                "description":"ubuntu iso item",
+                "keywords":"linux, ubuntu, calver",
+                "original_filename":"Ubuntu-20.04.3-live-server-amd64.iso",
+                "last_update":"2021-11-16 15:06:47",
+                "homepage_url":"ubuntu.org",
+                "documentation_url":"ubuntu.org/documentation/",
+                "download_urls":"{'k': 'v'}"
+            }
 ```
-
-
-From an Admin panel built using Django, the User should be able to:
-- [ ] View the currently downloaded ISO files by family names, flavors and versions (Windows 10, Linux Ubuntu, etc.)
-- [ ] Select which ISO files to update
-- [ ]  Select which OS to download
-- [ ]  Select which flavor of the OS to download
-- [ ]  Select to which major version of the OS to update (precise version or `latest`)
-- [ ]  Select to which minor version of the OS to update (precise version or `latest`)
-- [ ]  Select to which patch version of the OS to update (precise version or `latest`)
--
-** Latest update chain only works from right to left example:
-** You cannot have latest major version and precise minor or patch version
-** You cannot latest minor version and precise patch version
-- Select how often to pull the new json file from the server
-- Launch the update of the selected ISO files. This step should:
-    - update the JSON file containing the list of downloaded ISO files (*optional, check when the file has last been updated, don't update if the json is less than 1 hour old)
-    - download the desired ISO file(s)
-    - delete the old ISO file(s) (*be careful not to delete ISO's that might be the 'best version' in two objects in the app!)
-
-
-
-add feature: : bittorrent download, remote library download(nfs, smb s3), remote share storage driver(nfs, smb, s3)
-add feature: custom folder structure (default structure will require the standard Family/OS - Flavor/os.vanilla-1.0.1.iso
-add feature:  download all latest from specific os family (or other conditions)
-add feature: add iso to catalog (form or json)
-add feature: import iso from folder

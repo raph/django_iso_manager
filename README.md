@@ -73,3 +73,10 @@ the app should use codebuild, autoscaling groups and amazon linux
 
 ### Entity relation diagram
 ![ERD](./docs/images/erd.jpg?raw=true "ERD")
+
+
+### Creating an update target flowchart
+![Create update target flowchart](./docs/images/create-update-target-flowchart.jpg?raw=true "Create update target steps")
+
+### Updating managed items state diagram
+![Updating managed items](./docs/images/update-target-state-diagram.jpg?raw=true "Updating managed item")

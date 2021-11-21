@@ -6,6 +6,39 @@ This Django App manages an ISO repository for Operation Systems (OS) images like
 
 ---
 
+## Installation and usage
+
+Clone repository
+
+`$ git clone https://github.com/raph/django_iso_manager.git`
+
+Change into the project's directory
+
+`$ cd django_iso_manager/`
+
+Install requirements
+
+`$ pip install -r requirements.txt`
+
+Make migrations
+
+`$ python manage.py makemigrations`
+
+Migrate
+
+`$ python manage.py migrate`
+
+Create admin user
+
+`$ python manage.py createsuperuser`
+
+Run the app
+
+`$ python manage.py runserver`
+
+Go to 127.0.0.1:8000/admin and enter credentials you created earlier with `createsuperuser`
+
+
 ## Infrastructure and requirements:
 
 - AWS Elastic Beanstalk

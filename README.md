@@ -2,7 +2,7 @@
 
 Django ISO Manager is a repository replication manager written in Python using the Django Framework.
 
-This Django App manages an ISO repository for Operation Systems (OS) images like Windows or Linux. .
+This Django App manages an ISO repository for Operation Systems (OS) images like Windows or Linux. 
 
 ---
 
@@ -21,7 +21,7 @@ the app should use codebuild, autoscaling groups and amazon linux
 - provide json data during first run
 - docs with diagrams
 
-### The app function includes:
+### The app functionality includes:
 - [x] Admin management console (django admin)
 - [ ] Scan repository folder and auto-add ISOs
 - [x] Import ISO images into a catalog using json
@@ -66,3 +66,10 @@ the app should use codebuild, autoscaling groups and amazon linux
                 "download_urls":"{'k': 'v'}"
             }
 ```
+
+## Documentation
+
+---
+
+### Entity relation diagram
+![ERD](./docs/images/erd.jpg?raw=true "ERD")

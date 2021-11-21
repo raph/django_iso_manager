@@ -17,10 +17,6 @@ This Django App manages an ISO repository for Operation Systems (OS) images like
 First, setup your development environment on AWS using the Elastic beanstalk service
 the app should use codebuild, autoscaling groups and amazon linux
 
-### TODO
-- provide json data during first run
-- docs with diagrams
-
 ### The app functionality includes:
 - [x] Admin management console (django admin)
 - [ ] Scan repository folder and auto-add ISOs

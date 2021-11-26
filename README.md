@@ -38,18 +38,6 @@ Run the app
 
 Go to 127.0.0.1:8000/admin and enter credentials you created earlier with `createsuperuser`
 
-
-## Infrastructure and requirements:
-
-- AWS Elastic Beanstalk
-- Codebuild
-- Autoscaling groups
-- Amazon Linux AMI
-- Installed packages from [requirements.txt](./requirements.txt) (includes Django and other package)
-
-First, setup your development environment on AWS using the Elastic beanstalk service
-the app should use codebuild, autoscaling groups and amazon linux
-
 ### The app functionality includes:
 - [x] Admin management console (django admin)
 - [ ] Scan repository folder and auto-add ISOs

@@ -37,13 +37,14 @@ class Datastore(TimeMixin):
             catalog_time = None
             print(checksum)
             try:
-                catalog_time = CatalogItem.objects.get(sha256sum=checksum)
+                # Get only first matched checksum from CatalogItem
+                catalog_time = CatalogItem.objects.filter(sha256sum=checksum)[0]
             except CatalogItem.DoesNotExist:
                 logger.error(f'no catalog item were found with checksum: {checksum}')
-            else:
-                item = ManagedItem.objects.get_or_create(datastore=self, full_path=path, sha256sum=checksum,
-                                                         library_item=catalog_time)
-                print(item)
+                pass
+            item = ManagedItem.objects.get_or_create(datastore=self, full_path=path, sha256sum=checksum,
+                                                     library_item=catalog_time)
+            print(item)
 
     def __str__(self):
         return "{0} - {1}".format(self.datastore_type, self.location)

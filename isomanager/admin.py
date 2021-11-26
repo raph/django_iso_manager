@@ -1,16 +1,14 @@
+from import_export.admin import ImportExportModelAdmin
+
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin, messages
 from django.db.models import JSONField
 from django.http import HttpResponseRedirect
 from django_json_widget.widgets import JSONEditorWidget
 
-from .forms import CatalogItemForm
-from .models import CatalogItem, Datastore, ManagedItem, OsEdition, RemoteCatalog, UpdateTarget
+# from .forms import CatalogItemForm
+from .models import CatalogItem, Datastore, ManagedItem, RemoteCatalog, UpdateTarget
 
-
-class OsEditionFilter(AutocompleteFilter):
-    title = 'Os Edition'  # display title
-    field_name = 'os_edition'  # name of the foreign key field
 
 
 # Register your models here.
@@ -31,7 +29,7 @@ class DatastoreAdmin(admin.ModelAdmin):
 
 
 @admin.register(RemoteCatalog)
-class RemoteCatalog(admin.ModelAdmin):
+class RemoteCatalog(ImportExportModelAdmin):
     list_display = ('catalog_name', 'version', 'remote_url', 'auto_update', 'priority', 'created_time', 'updated_time')
     list_filter = ('auto_update',)
     date_hierarchy = 'created_time'
@@ -39,30 +37,46 @@ class RemoteCatalog(admin.ModelAdmin):
     formfield_overrides = {
         JSONField: {'widget': JSONEditorWidget},
     }
+    change_form_template = "isomanager/admin/remote-cat-populate-items-form.html"
+
+    def response_change(self, request, obj):
+        if "populate_cat_items" in request.POST:
+            obj.populate_cat_items()
+            messages.success(request, 'Populating catalog items from JSON catalog is done.')
+            return HttpResponseRedirect(".")  # stay on the same detail page
+
+        return super().response_change(request, obj)
 
 
 @admin.register(CatalogItem)
-class CatalogItemAdmin(admin.ModelAdmin):
-    form = CatalogItemForm
-    list_display = ('sha256sum', 'maintainer', 'os_edition', 'release_date', 'detached_from_head', 'created_time')
-    list_filter = ('detached_from_head', OsEditionFilter)
+class CatalogItemAdmin(ImportExportModelAdmin):
+    # form = CatalogItemForm
+    list_display = ('os_edition_name', 'sha256sum', 'release_date', 'created_time')
+    # list_filter = (OsEditionFilter,)
     search_fields = ('sha256sum',)
-    raw_id_fields = ('os_edition',)
+    # raw_id_fields = ('os_edition',)
     date_hierarchy = 'created_time'
     formfield_overrides = {
         JSONField: {'widget': JSONEditorWidget},
     }
 
+    class Meta:
+        model = CatalogItem
 
-@admin.register(OsEdition)
-class OsEditionAdmin(admin.ModelAdmin):
-    list_display = (
-        'os_edition_type', 'os_edition_name', 'os_edition_version',
-        'os_edition_arch', 'os_edition_language', 'created_time', 'updated_time'
-    )
-    list_filter = ('os_edition_arch', 'os_edition_language')
-    search_fields = ('os_edition_type', 'os_edition_name', 'os_edition_version', 'os_edition_arch', 'os_edition_language',)
 
+
+# @admin.register(OsEdition)
+# class OsEditionAdmin(admin.ModelAdmin):
+#     list_display = (
+#         'os_edition_type', 'os_edition_name', 'os_edition_version',
+#         'os_edition_arch', 'os_edition_language', 'created_time', 'updated_time'
+#     )
+#     list_filter = ('os_edition_arch', 'os_edition_language')
+#     search_fields = ('os_edition_type', 'os_edition_name', 'os_edition_version', 'os_edition_arch', 'os_edition_language',)
+#
+# class OsEditionFilter(AutocompleteFilter):
+#     title = 'OS'
+#     field_name = 'os_edition'
 
 @admin.register(ManagedItem)
 class ManagedItemAdmin(admin.ModelAdmin):

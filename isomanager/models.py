@@ -128,7 +128,7 @@ class CatalogItem(TimeMixin):
     contributors = models.CharField(_('Contributors'), help_text=_('Contributors'), max_length=255)
     author = models.CharField(_('OS Author'), help_text=_('The author of the OS'), max_length=32)
     private = models.BooleanField(_('Private'), help_text=_('Private'), default=False)
-    sha256sum = models.CharField(_('SHA256 Checksum'), help_text=_('SHA256 Checksum for this file'), max_length=255)
+    sha256sum = models.CharField(_('SHA256 Checksum'), help_text=_('SHA256 Checksum for this file'), max_length=255, unique=True)
     sha256sum_gpg = models.TextField(_('GPG key'), help_text=_('GPG key of the checksum'))
     release_date = models.DateTimeField(_('Release date'), help_text=_('The release date of this version'))
     description = models.CharField(_('Description'), help_text=_('Item description'), max_length=100)

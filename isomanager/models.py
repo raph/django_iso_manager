@@ -1,5 +1,6 @@
 import json
 import logging
+import requests
 from pathlib import Path
 
 import recurrence.fields
@@ -61,7 +62,12 @@ class RemoteCatalog(TimeMixin):
     The public catalog of ISO images
     """
     catalog_name = models.CharField(_('Catalog name'), help_text=_('The name of the catalog'), max_length=32)
-    json_catalog = models.JSONField(_('JSON catalog'), help_text=_('The JSON model as downloaded from the upstream'))
+    json_catalog = models.JSONField(
+        _('JSON catalog'),
+        help_text=_('The JSON model as downloaded from the upstream'),
+        blank=True,
+        null=True,
+    )
     version = models.CharField(_('Version'), help_text=_('Version of the JSON catalog'), max_length=32)
     remote_url = models.CharField(_('Remote URL'), help_text=_('Remote URL to update the JSON model'), max_length=255)
     auto_update = models.BooleanField(_('Auto Update'), help_text=_('Auto update the JSON catalog'), default=True)
@@ -72,37 +78,57 @@ class RemoteCatalog(TimeMixin):
         """
         Populates catalog items from json_catalog, assumes necessary data is present and in correct format
         """
-        for item in self.json_catalog:
-            CatalogItem.objects.update_or_create(
-                # Check if catalog item with this checksum exists
-                sha256sum=item["sha256sum"],
-                # If not create a new object
-                defaults={
-                    "os_edition_type": item["os_edition_type"],
-                    "os_edition_name": item["os_edition_name"],
-                    "os_edition_version": item["os_edition_version"],
-                    "os_edition_arch": item["os_edition_arch"],
-                    "os_edition_language": item["os_edition_language"],
-                    "os_edition_version_scheme": item["os_edition_version_scheme"],
-                    "os_edition_description": item["os_edition_description"],
-                    "contributors": item["contributors"],
-                    "author": item["author"],
-                    "private": item["private"],
-                    "sha256sum": item["sha256sum"],
-                    "sha256sum_gpg": item["sha256sum_gpg"],
-                    "release_date": item["release_date"],
-                    "description": item["description"],
-                    "keywords": item["keywords"],
-                    "original_filename": item["original_filename"],
-                    "last_update": item["last_update"],
-                    "homepage_url": item["homepage_url"],
-                    "documentation_url": item["documentation_url"],
-                    "download_urls": item["download_urls"],
-                }
-            )
+        print("populate_cat_items called.")
+        print(self.json_catalog)
+        if self.json_catalog:
+            for item in self.json_catalog:
+                CatalogItem.objects.update_or_create(
+                    # Check if catalog item with this checksum exists
+                    sha256sum=item["sha256sum"],
+                    # If not create a new object
+                    defaults={
+                        "os_edition_type": item["os_edition_type"],
+                        "os_edition_name": item["os_edition_name"],
+                        "os_edition_version": item["os_edition_version"],
+                        "os_edition_arch": item["os_edition_arch"],
+                        "os_edition_language": item["os_edition_language"],
+                        "os_edition_version_scheme": item["os_edition_version_scheme"],
+                        "os_edition_description": item["os_edition_description"],
+                        "contributors": item["contributors"],
+                        "author": item["author"],
+                        "private": item["private"],
+                        "sha256sum": item["sha256sum"],
+                        "sha256sum_gpg": item["sha256sum_gpg"],
+                        "release_date": item["release_date"],
+                        "description": item["description"],
+                        "keywords": item["keywords"],
+                        "original_filename": item["original_filename"],
+                        "last_update": item["last_update"],
+                        "homepage_url": item["homepage_url"],
+                        "documentation_url": item["documentation_url"],
+                        "download_urls": item["download_urls"],
+                    }
+                )
 
     def __str__(self):
         return "{0}".format(self.catalog_name)
+
+
+    def save(self, *args, **kwargs):
+        """ it will download contant frol remote url and store into json_catalog
+        """
+        try:
+            res = requests.get(self.remote_url)
+        except Execption as err:
+            print(err)
+        else:
+            if res.status_code == 200:
+                self.json_catalog = res.json()
+            else:
+                self.json_catalog = None
+                print(res.content)
+        super(RemoteCatalog, self).save(*args, **kwargs)
+
 
     class Meta:
         verbose_name = _('Catalog')

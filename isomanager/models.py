@@ -115,7 +115,8 @@ class RemoteCatalog(TimeMixin):
 
 
     def save(self, *args, **kwargs):
-        """ it will download contant frol remote url and store into json_catalog
+        """ 
+        Download JSON from remote url and store into json_catalog
         """
         try:
             res = requests.get(self.remote_url)

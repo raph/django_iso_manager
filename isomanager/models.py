@@ -78,8 +78,6 @@ class RemoteCatalog(TimeMixin):
         """
         Populates catalog items from json_catalog, assumes necessary data is present and in correct format
         """
-        print("populate_cat_items called.")
-        print(self.json_catalog)
         if self.json_catalog:
             for item in self.json_catalog:
                 CatalogItem.objects.update_or_create(

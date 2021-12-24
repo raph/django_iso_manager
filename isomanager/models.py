@@ -6,6 +6,7 @@ from pathlib import Path
 import recurrence.fields
 from django.db import models
 from django.utils.translation import gettext as _
+from django.utils import timezone
 
 from isomanager.choices import AuthType, DatastoreType, OsArch, OsLanguage, OsType
 from isomanager.mixins.model_mixins import TimeMixin
@@ -35,18 +36,22 @@ class Datastore(TimeMixin):
         p = Path(self.location)
         for path in p.glob('**/*.iso'):
             checksum = hash(path)
-            catalog_time = None
+            catalog_item = None
             print(checksum)
             try:
                 # Get only first matched checksum from CatalogItem
                 catalog_item = CatalogItem.objects.filter(sha256sum=checksum)
-
             except CatalogItem.DoesNotExist:
                 logger.error(f'no catalog item were found with checksum: {checksum}')
                 pass
-            item = ManagedItem.objects.get_or_create(datastore=self, full_path=path, sha256sum=checksum,
+            if catalog_item:
+                item = ManagedItem.objects.get_or_create(datastore=self, full_path=path, sha256sum=checksum,
                                                      defaults={'library_item':catalog_item})
+            else:
+                item = ManagedItem.objects.get_or_create(datastore=self, full_path=path, sha256sum=checksum)
             print(item)
+        self.last_scan = timezone.now()
+        self.save()
 
     def __str__(self):
         return "{0} - {1}".format(self.datastore_type, self.location)
@@ -166,7 +171,7 @@ class CatalogItem(TimeMixin):
     documentation_url = models.CharField(_('OS Documentation URL'), help_text=_('URL of the OS documentation'),
                                          max_length=255)
     download_urls = models.JSONField(_('URLs to download OS'),
-                                     help_text=_('The JSON object containing URLs to download the OS'))
+                                     help_text=_("""The JSON object containing URLs to download the OS, e.g. '[{"uri": "https://...","country": "USA","uplink_speed" "10Gb"},...]'""" ))
 
     def __str__(self):
         return "{0} {1}".format(self.os_edition_name, self.author)

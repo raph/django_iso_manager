@@ -12,12 +12,20 @@ from .models import CatalogItem, Datastore, ManagedItem, RemoteCatalog, UpdateTa
 
 
 # Register your models here.
+
+@admin.action(description='Scan ISO files')
+def scan_action(modeladmin, request, queryset):
+    for obj in queryset:
+        obj.scan()
+    messages.success(request, 'Scanning ISO files is done.')
+
 @admin.register(Datastore)
 class DatastoreAdmin(admin.ModelAdmin):
     list_display = ('location', 'datastore_type', 'auth_type', 'readonly', 'last_scan', 'created_time', 'updated_time')
     list_filter = ('datastore_type', 'auth_type', 'readonly')
     date_hierarchy = 'created_time'
     change_form_template = "isomanager/admin/change-form.html"
+    actions = [scan_action]
 
     def response_change(self, request, obj):
         if "scan" in request.POST:
@@ -35,7 +43,7 @@ class RemoteCatalog(ImportExportModelAdmin):
     date_hierarchy = 'created_time'
     search_fields = ('catalog_name',)
     formfield_overrides = {
-        JSONField: {'widget': JSONEditorWidget},
+        JSONField: {'widget': JSONEditorWidget(mode='tree')},
     }
     change_form_template = "isomanager/admin/remote-cat-populate-items-form.html"
 
@@ -57,7 +65,7 @@ class CatalogItemAdmin(ImportExportModelAdmin):
     # raw_id_fields = ('os_edition',)
     date_hierarchy = 'created_time'
     formfield_overrides = {
-        JSONField: {'widget': JSONEditorWidget},
+        JSONField: {'widget': JSONEditorWidget(mode='tree')},
     }
 
     class Meta:

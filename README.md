@@ -36,9 +36,12 @@ Run the app
 
 `$ python manage.py runserver`
 
-Go to 127.0.0.1:8000/admin and enter credentials you created earlier with `createsuperuser`
+Go to http://127.0.0.1:8000/admin and enter credentials you created earlier with `createsuperuser`
+
+At this stage, it is possible to scan a folder with ISO images (ISOMANAGER > Auto-Update Targets > Add Auto-Update Target). This works better if all the images are already registered in the catalog (see [below](#Example json data for importing an ISO) for its format). Alternative, you can add individual ISO images in ISOMANAGER > Managed Items > Add Managed Item). In that case, you will have to create a Catalog Item for the ISO (Library Item -> '+').
 
 ### The app functionality includes:
+
 - [x] Admin management console (django admin)
 - [ ] Scan repository folder and auto-add ISOs
 - [x] Import ISO images into a catalog using json
@@ -84,7 +87,7 @@ Go to 127.0.0.1:8000/admin and enter credentials you created earlier with `creat
             }
 ```
 
-## Documentation
+## Developer Documentation
 
 ---
 
